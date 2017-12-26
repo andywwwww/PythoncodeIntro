@@ -1,0 +1,90 @@
+class priorityQueue:
+    #The ADT PriorityQueue is implemented as a heap.
+    #Need insert and deletemax as the supported functions
+    def __init__(self):
+        self.heap=[]
+        # As discussed in class,
+        #   heap[1:n] is the body of the heap.
+        # It's regarded as an array of integers
+        #   whose index range is 1:n, NOT 0:n-1
+        self.size = 0
+    def __len__(self):
+        return self.size
+    def parent(self,index):
+        # index is between 1 and self.size
+        # It returns the value of the parent of heap[index]
+        # If index<=1 or index>self.size, it reutnrs None
+        #---- code ------
+        if index > 1 or index <= self.size:
+            return self.heap[index // 2 - 1]
+        else:
+            return None
+    def leftChild(self,index):
+        # It returns the value of the left child
+        #---- code -----
+        left_index = 2 * index - 1
+        if (2 * index <= size.size) or index >= 1:
+            return self.heap[left_index]
+        else:
+            return None
+    
+    def rightChild(self,index):
+        # It returns the value of the left child
+        #---- code -----
+        right_index = 2 * index + 1
+        if right_index <= self.size or index >= 1:
+            return self.heap[2*index]
+        else:
+            return None
+        
+    def swap(self, index1, index2):
+        self.heap[index1-1], self.heap[index2-1] = self.heap[index2-1], self.heap[index1-1]
+
+    def insert(self,x):
+        # x is an integer, and the funciton just inserts it
+        #   into self.heap, satisfying the heap property
+        # It returns nothing just changing the heap
+        # --- code ----- You can use the swap function above
+#increase size in prep for additional variable 
+        self.size += 1
+#add new x to heap
+        self.heap.append(x)
+#make the index the last spot in heap
+        index = self.size
+#continue moving around until index reaches end or as long as parent index is greader than current index
+        while (self.parent(index)) < (self.heap[index - 1]) and index > 1:
+#take center of hierarchy position and divide by two
+            par_index = index // 2
+#swap the new component and parent component
+            self.swap(index, par_index)
+#now set the old parental index to main index variable
+            index = par_index
+        
+#Test code
+h = priorityQueue()
+h.insert(10)
+print(h.heap)
+h.insert(5)
+print(h.heap)
+h.insert(14)
+print(h.heap)
+h.insert(9)
+print(h.heap)
+h.insert(2)
+print(h.heap)
+h.insert(11)
+print(h.heap)
+h.insert(6)
+print(h.heap)
+### This should print out
+#[10]
+#[10, 5]
+#[14, 5, 10]
+#[14, 9, 10, 5]
+#[14, 9, 10, 5, 2]
+#[14, 9, 11, 5, 2, 10]
+#[14, 9, 11, 5, 2, 10, 6]
+#
+### Draw the heap on a sheet of paper
+#       to see the last line satisfies the heap property
+
