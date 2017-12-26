@@ -1,0 +1,73 @@
+import math
+
+class Complex:
+    def __init__ (self, r, i ):  
+        self.real = r
+        self.imag = i 
+
+    # Copy the three functions from Activity 1 of vLec9_8
+    def conjugate(self):
+        self.imag *= -1
+        
+    def magnitude(self):
+        return math.sqrt(self.real**2+self.imag**2)
+    
+    def add(self,c):
+        if not isinstance(c, Complex):
+            return "Type Mismatch Error"
+        self.real += c.real
+        self.imag += c.imag
+
+     
+     
+
+    def multiply(self, c):
+        #Procedural method: multiply self by c to change self where c is Complex
+        # code starts here
+        #self = self.real*(c.real+c.imag)
+        self.real = (self.real*c.real) - (self.imag*c.imag)
+        self.imag = (self.imag*c.real) + (self.real*c.imag)
+        # code ends here
+
+
+    def divide(self, c):
+        #Procedural method: devide self by c to change self where c is Complex
+        # code starts here
+        #c.real = cr
+        #c.imag = ci
+        sr, si, cr,ci = self.real, self.imag, c.real, c.imag
+        r = float(cr**2 + ci**2)
+        self.real = (sr*cr+si*ci)/r
+        self.imag = (si*cr-sr*ci)/r
+        # code ends here
+
+
+    def power(self, n):
+        # Procedural method: take self to the power n to change self,
+        #   where n is a positive integer
+        #
+        # code starts here
+        sr, si = self.real, self.imag
+        if n < 0:
+            return 'Type Mismatch Error'
+        inside = self.imag/self.real
+        self.real = int((math.sqrt(sr**2 + si**2) **n) * (math.cos(n * math.atan(inside))))
+        self.imag = int((math.sqrt(sr**2 + si**2) **n) * (math.sin(n * math.atan(inside))))
+
+        # ends here
+            
+
+
+# test code
+c1 = Complex(3,2)
+c2 = Complex(4,-1)
+c1.add(c2)
+print((c1.real, c1.imag))
+c1.power(4)
+print((c1.real, c1.imag))
+c1.divide(c2)
+print((c1.real, c1.imag))
+# should prints
+#(7, 1)
+#(2108, 1344)
+#(416.94117647058823, 440.2352941176471)
