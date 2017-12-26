@@ -1,0 +1,47 @@
+def joinedList(n):
+    # n : positive integer
+    # It returns the list [1,2,3,...,n-1, n, n, n-1, ...., 3,2,1]
+    # --- Function body starts here
+    x = []
+    for i in range(1,n+1):
+        x.append(i)  
+    x +=x[::-1]
+    return x
+        
+    # --- ends here
+    
+
+def removePunctuation(s):
+    # s : string
+    # It replaces every charactor that is not an alphabet letter
+    #   into a space, and returns it.
+    #
+    # e.g.
+    #   s = "She sells seashells, ...., but at home.. (She's afraid of water)"
+    #   removePunctuation(s)
+    #       = "She sells seashells        but at home    She s afraid of water"
+    #
+    #   hint: Study string methods.py in detail. Convert s into a list,
+    #       and use a for-loop including an if-block
+    #
+    # --- Function body starts here
+    x = list(s)
+    for i in range(0,len(x)):
+        if x[i].isalpha() == False:
+            x[i]=' '
+    y = ''.join(x)
+    return y
+    # ---  ends here
+
+
+
+
+### My answer key includes 11 coded lines in total.
+### To check:
+print(joinedList(10))
+# should output
+# [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+s = "She sells seashells, ...., but at home.. (She's afraid of water)"
+print(removePunctuation(s))
+# should output
+#She sells seashells        but at home    She s afraid of water
