@@ -1,0 +1,50 @@
+def selectionSort(intList):
+    n=len(intList)
+    for i in range(n):
+        for k in range(i, n):
+            if intList[i]>intList[k]:
+                intList[i], intList[k] = intList[k], intList[i]
+    return intList
+
+def insertionSort(intList):
+    for i in range(len(intList)):
+        k=i
+        while k>0 and intList[k-1]>intList[k]:
+            intList[k-1], intList[k] = intList[k], intList[k-1]
+            k-=1
+    return intList
+
+
+def merge(A1, A2):
+    #A1 and A2 are sorted list. The function merges A1 with A2
+    #   to return a single sorted list including all elements
+    # start code here
+    c = []
+    while len(A1) != 0 and len(A2) != 0:
+        if A1[0] < A2[0]:
+            c.append(A1[0])
+            A1.remove(A1[0])
+        else:
+            c.append(A2[0])
+            A2.remove(A2[0])
+    if len(A1) == 0:
+        c += A2
+    else:
+        c += A1
+    return c    
+    # until here
+            
+
+def mergeSort(A):
+    # start code here
+    if len(A) == 0 or len(A) == 1:
+        return A
+    else:
+        middle = len(A)//2
+        A1 = mergeSort(A[:middle])
+        A2 = mergeSort(A[middle:])
+        return merge(A1,A2)
+    # until here
+
+
+
