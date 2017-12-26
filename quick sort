@@ -1,0 +1,18 @@
+def quickSort(intList):
+    n = len(intList)
+    if n <= 1:
+        return intList
+    x, left, right = intList[0], 0, n-1
+    while left < right:
+        if intList[left] <= x:
+            left +=1
+        else:
+            intList[left], intList[right] = intList[right],intList[left]
+            right -= 1
+    intList[0], intList[left] = intList[left], intList[0]
+    quickSort(intList[:left])
+    quickSort(intList[left+1:])
+    return intList
+
+intList=[3,5,4,1,2]
+print(quickSort(intList))
