@@ -1,0 +1,44 @@
+def removePunctuation(document):
+    x = list(document)
+    for i in range(0,len(x)):
+        if x[i].isalpha() == False:
+            x[i]=' '
+    y = ''.join(x)
+    return y
+
+#import pdb        
+    
+def countWords(document):
+    #-- start code here ---
+    #get rid of punctions first
+    y = removePunctuation(document)
+    #all caps to lower case
+    y = y.lower().split()
+    #create a dictionary
+    wordCounts = {}
+    for word in y:
+        #if word=="will":
+         #   pdb.set_trace()
+        if word in wordCounts:
+            wordCounts[word] += 1
+        else:
+            wordCounts[word] = 1
+    return wordCounts
+    
+    #-- ends here ---
+
+
+
+# Test code
+document = '''
+He will be the president of the company; right now
+he is a vice president. 
+But he ..... himself,  is no sure of it...
+(Later he will see the imporance of these.)
+'''
+print(countWords(document))
+# It should print
+#{'he': 4, 'will': 2, 'be': 1, 'the': 3, 'president': 2,
+#'of': 3, 'company': 1, 'right': 1, 'now': 1, 'is': 2, 'a': 1,
+#'vice': 1, 'but': 1, 'himself': 1, 'no': 1, 'sure': 1, 'it': 1, 'later': 1,
+#'see': 1, 'imporance': 1, 'these': 1}
