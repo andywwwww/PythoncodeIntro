@@ -1,0 +1,98 @@
+
+class Container:
+    class node:
+        def __init__( self, value, nextNode, prevNode ):
+            self.value = value
+            self.next = nextNode
+            self.prev = prevNode
+
+    def __init__( self ):           
+        self.top = self.last = None
+        self.size = 0
+
+    def __len__( self ):
+        return self.size
+
+    def _locate(self,top, val ):
+        if top is None:
+            return top, False
+        elif top.value == val:
+            return top, True
+        elif top.value>val:
+            return top, False
+        else:
+            return self,_locate(top.next,val)
+        
+    def find( self, val ): 
+        node, found = self._locate(self.top, val)
+        return found
+        
+    def insert( self, val ):
+        #use _locate. If found=True, do nothing
+        # If found=False and node is not None,
+        #   then insert a new node just before the returned node
+        # If found=False and node is None
+        #   then insert a new node at the last pointer
+        # And change size
+        # Complete the function code with the four cases below
+        node, found = self._locate(self, val)
+        if found==False:
+            newNode = self.node(val, None, None)
+            if node is not None and node.prev is not None:
+                node.prev.next = newNode
+                newNode.next = node
+                node.prev = newNode
+                self.size +=1
+            elif node is not None and node.prev is None:
+                newNode.next = node
+                node.prev = newNode
+                self.top = newNode
+                self.size += 1
+            elif node is None and self.last is not None:
+                self.last.next = newNode
+                newNode.prev = self.last
+                self.last = newNode
+                self.size += 1
+            elif node is None and self.last is None:
+                self.last = self.top = newNode
+                self.size += 1
+
+    def delete( self, val ):
+        # Use _locate again.
+        # Delete the returned node if found is True
+        #    in the four cases below
+        node, found = self._locate(val)
+        if found:
+            if node.prev is not None and node.next is not None:
+               node.next.prev = node.prev
+               node.prev.next = node.next
+               node = None
+               self.size -= 1#trying to connect node.prev pointer to node.next pointer
+            elif node.prev is not None and node.next is None:
+                self.last = node.prev #make the previous node the last node
+            elif node.prev is None and node.next is not None:
+                self.top = node.next #current node is first node, change it so next node is the new first node
+            elif node.prev is None and node.next is None:
+                self.size = 0 #there's only one node in list, change the size so now there's zero
+
+                
+#For code check
+c = Container()
+c.insert(9)
+c.insert(5)
+c.insert(8)
+c.delete(8)
+c.insert(1)
+c.insert(13)
+c.insert(4)
+c.delete(9)
+out=[]
+pointer = c.top
+while pointer is not None:
+    out.append(pointer.value)
+    pointer = pointer.next
+print(out)
+print(c.find(9))
+# The output should be
+#   [2, 8, 9, 15]
+#   True False
