@@ -1,0 +1,127 @@
+'''
+class queue:
+
+    class node:
+        def _init_(self,value,nextNode):
+            self.value = value
+            self.nextNode = nextNode
+
+        def _init_(self):
+            self.top = None
+            self.last = None
+            self.size = 0
+
+        def _len_(self):
+            return self.size
+
+        def enqueque(self, value):
+            newNode = self.node(value,None)
+            if self.size == 0:
+                self.top = self.last = newNode
+                self.size += 1
+            else:
+                self.last.nextNode = newNode
+                self.last = newNode
+                self.size += 1
+                
+        def dequeue(self):
+            if self.size == 0:
+                return "error"
+            elif self.size == 1:
+                returnedValue = self.top.value
+                self.top = self.last = None
+                self.size -= 1
+                return returnedValue
+'''
+
+class Container:
+    class node:
+        def __init__( self, value, nextNode, prevNode ):
+            self.value = value
+            self.next = nextNode
+            self.prev = prevNode
+
+    def __init__( self ):           
+        self.top = self.last = None
+        self.size = 0
+
+    def __len__( self ):
+        return self.size
+
+    def _locate( self, val ):
+        # Remember the list is sorted and doubly linked.
+        # Code carefully to meet the above spec.
+        currentNode=self.top
+        while True:
+            if currentNode is None:
+                return None, False
+            # Code the rest of _locate. Make a complete case analysis
+            elif currentNode.value == val:
+                return currentNode, True
+            elif currentNode.value>val:
+                return currentNode, False
+            elif currentNode.next == None:
+                return None, False
+            else:
+                currentNode = currentNode.next
+
+  
+
+        
+    def find( self, val ):
+        # It returns True if val is in the Container, and False otherwise
+        # Code using _locate() in just 2 lines
+        node, found = self._locate(val)
+        return found
+
+    #In today's version, you don't need to code insert(val) and delete(val)
+    def insert( self, val ):
+        dummy = val
+
+    def delete( self, val ):
+        dummy = val
+
+
+
+
+
+###For code check, create a sample container
+# Just as the activity in vLec9_15,
+#   create the container class including
+#    1, 2, 3, 4 from the top to last 
+
+n1 = Container.node(1, None, None)
+n2 = Container.node(2, None, None)
+n3 = Container.node(3, None, None)
+n4 = Container.node(4, None, None)
+n1.next = n2
+n2.next = n3
+n3.next = n4
+n4.prev = n3
+n3.prev = n2
+n2.prev = n1
+c = Container()
+c.top = n1
+c.last = n4
+
+#Now test _locate()
+node, found = c._locate(3)
+print("The located node has the value",  node. value, ".  The found flag says ", found)
+
+
+node, found = c._locate(3.5)
+print("The located node has the value",  node. value, ".  The found flag says ", found)
+
+
+node, found = c._locate(6)
+print("The located node should be none: ",  node, ".  The found flag says ", found)
+
+print(c.find(4), c.find(5))
+
+
+### These should print:
+#The located node has the value 3 .  The found flag says  True
+#The located node has the value 4 .  The found flag says  False
+#The located node should be none:  None .  The found flag says  False
+#True False
+
