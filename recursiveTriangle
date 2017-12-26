@@ -1,0 +1,20 @@
+
+def recursiveTriangle(k,n):
+    output = ''
+    space = n-k
+    star = k
+    while space > 0:
+        output += ' '
+        space -=1
+    while star > 0:
+        output +='*'
+        star -= 1
+    if k == 0:
+        return ''
+    else:
+        return output + '\n' + recursiveTriangle(k-1,n)
+def triangle(n):
+    return recursiveTriangle(n,n)
+        
+print(triangle(6))
+print(recursiveTriangle(3,5))
