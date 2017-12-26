@@ -1,0 +1,170 @@
+class expressionTree:
+     
+    class treeNode:
+        def __init__(self, value, lchild, rchild):
+            self.value, self.lchild, self.rchild = value, lchild, rchild
+ 
+    def __init__(self):
+        self.treeRoot = None
+ 
+ 
+    #Use these versions of isNumber and findNextOpr
+    def isNumber(self, expr):
+        try:
+            expr = expr.replace(" ","")
+            a = float(expr)
+            return True
+        except:
+            return False
+         
+    #This generalizes findNextOpr for HW3. It avoids "-" at the top.
+    #Use it as explained in the video class
+    def findNextOpr(self, s, oprList):
+    # Copy the answer to the activity in the video class
+        t = s.strip()
+        p = -1
+        if t[0] == '-':
+            p = s.find("-")
+            s = s[:p] + ' ' + s[p+1:]
+            s = s[:p].join("(")
+            s = s[p+1:].join(")")
+        posList = []
+        for item in oprList:
+            pos = s.find(item, p+1)
+            if pos >= 0:
+                posList.append(pos)
+        if len(posList) == 0:
+            return -1
+        else:
+            return min(posList)            
+ 
+         
+    def mask(self, s):
+    # Copy the function body from debugging.py  
+        nestLevel = 0
+        masked = list(s)
+        for i in range(len(s)):
+            if s[i]==")":
+                nestLevel -=1
+            elif s[i]=="(":
+                nestLevel += 1
+            if nestLevel>0 and not s[i]=="(":  # Line A
+                masked[i]=" "
+        return "".join(masked)
+ 
+ 
+     
+    def _construct(self,expr):
+        expr=expr.strip()
+        if expr=="":
+            return None
+        elif self.isNumber(expr):
+            return self.treeNode(expr.replace(" ",""), None, None)
+        else:
+            # --- start code ---
+            s = self.mask(expr)
+            
+            pos=s.find("+")
+            if pos<0:
+                pos=s.find("-")
+            if pos<0:
+                pos=s.find("*")
+            if pos<0:
+               pos=s.find("/")
+            if pos<0:
+                pos=s.find("^")
+            if pos<0 and (expr[0]=="(" and expr[len(expr)-1]==")"):
+                return self._construct(expr[1:len(expr)-1])
+            opr = expr[pos]
+            root = self.treeNode(opr, None, None)
+            root.lchild = self._construct(expr[:pos])
+            root.rchild = self._construct(expr[pos+1:])
+            return root
+                       
+ 
+            # --- until here ---
+ 
+ 
+ 
+    def constructTree(self, expr):
+        #This is a procedual method to change self.treeRoot
+        # --- code in 1 line ---
+        self.treeRoot = self._construct(expr)
+        
+         
+ 
+ 
+ 
+    #This returns the reverse polish notation of the expression tree
+    # rooted at "root". See the lecture notes for pseudo code
+    # of the recursive function. Consider also when root is None.
+    def _revPolish(self, root):
+        # --- code ---
+        x=""
+        if root == None:
+          return ''
+        else:
+            x += str(self._revPolish(root.lchild))
+            x += str(self._revPolish(root.rchild))
+            x += str(root.value)
+            return x
+        return _revPolish(self, root)
+         
+        # --- until here ---
+ 
+ 
+ 
+    def revPolish(self):
+        #A functional method to return a string including the rev. polish notation
+        # --- code in 1 line ----
+        return self._revPolish(self.treeRoot)
+         
+ 
+ 
+ 
+ 
+# Test codes
+# The pseudo code in the lecture notes modified
+def getExpr(root):
+    TL, TR = root.lchild, root.rchild
+    if TL==None and TR==None:
+        r = str(root.value)
+        if float(r)<0:
+            return "(" + r + ")"
+        else:
+            return r
+    else:
+        if TL==None:
+            L = ""
+        elif (root.value=="*" or root.value=="/" or root.value=="^") and (TL.value=="+" or TL.value=="-"):
+            L = "(" + getExpr(TL) + ")"
+        else:
+            L = getExpr(TL)
+        if TR==None:
+            R = ""
+        elif (root.value=="*" or root.value=="/" or root.value=="^") and (TR.value=="+" or TR.value=="-"):
+            R = "(" + getExpr(TR) + ")"
+        else:
+            R = getExpr(TR)
+        return L + str(root.value) + R
+ 
+#Test input without negations
+e1 = expressionTree()
+expr = " 3 *4 + 2*(5 /2 * 6 + 1) + 2*3"
+e1.constructTree(expr)
+print(getExpr(e1.treeRoot))
+#This should print:
+#3*4+2*(5/2*6+1)+2*3
+ 
+# Reverse polish notation of e1
+print(e1.revPolish())
+#Should print:
+#34*2526*/1+*23*++
+ 
+#Test input with negations           
+e2 = expressionTree()
+expr =" ((2-4*2)*5 - 1 / 3) -   12 - ( - 2 )*( 3 - 5/4) "
+e2.constructTree(expr)
+print(getExpr(e2.treeRoot))
+#Should print:
+#(2+(-4)*2)*5+(-1)/3+(-12)-(-2)*(3+(-5)/4)
